@@ -1,5 +1,4 @@
-// I've disabled all tests so as to not bombard you with failures.
-// Remove the 'x' in 'xit' to enable each test.
+/* global describe, xit, expect, curry1, contains, singletonSet, union, intersection, naturalNumbersGenerator, memoize, curryn */
 
 describe('curry1', function() {
     function add(a, b) {
