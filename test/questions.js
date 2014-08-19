@@ -107,51 +107,88 @@ describe('naturalNumbersGenerator', function() {
 });
 
 describe('memoize', function() {
-    xit('returns a function that returns the value of the passed in function', function() {
-        function add1(x) {
-            return x + 1;
-        }
-
-        var memoizedAdd1 = memoize(add1);
-        expect(memoizedAdd1(2)).toBe(3);
-        expect(memoizedAdd1(3)).toBe(4);
+    xit('returns a function', function() {
+        expect(typeof memoize(function() {})).toBe('function');
     });
-    xit('returns a function that returns the same value if the argument has been used before', function() {
-        function add1(x) {
-            return x + 1;
-        }
+    describe('the returned function', function() {
+        xit('returns the value of the memoized function', function() {
+            function add1(x) {
+                return x + 1;
+            }
 
-        var memoizedAdd1 = memoize(add1);
-        expect(memoizedAdd1(2)).toBe(3);
-        expect(memoizedAdd1(2)).toBe(3);
-    });
-    xit('returns a function that only calls the passed in function once for each distinct argument value', function() {
-        // Yet another use of closures :)
-        var calls = 0;
-        function add1(x) {
-            calls++;
-            return x + 1;
-        }
+            var memoizedAdd1 = memoize(add1);
+            expect(memoizedAdd1(2)).toBe(3);
+            expect(memoizedAdd1(3)).toBe(4);
+        });
+        xit('returns the same value if the argument has been used before', function() {
+            function add1(x) {
+                return x + 1;
+            }
 
-        var memoizedAdd1 = memoize(add1);
-        memoizedAdd1(2);
-        memoizedAdd1(2);
-        memoizedAdd1(3);
-        memoizedAdd1(3);
-        expect(calls).toBe(2);
-    });
-    // Hint: The ECMA 6 Map type is one way to solve this. (Chrome supports it if you enable experimental JavaScript in chrome://flags)
-    xit('returns a function that distinguishes between different objects passed as arguments', function() {
-        function getFoo(obj) {
-            return obj.foo;
-        }
+            var memoizedAdd1 = memoize(add1);
+            expect(memoizedAdd1(2)).toBe(3);
+            expect(memoizedAdd1(2)).toBe(3);
+        });
+        xit('only calls the passed in function once for each distinct argument value', function() {
+            // Yet another use of closures :)
+            var calls = 0;
 
-        var memoizedGetfoo = memoize(getFoo);
+            function add1(x) {
+                calls++;
+                return x + 1;
+            }
 
-        var a = { foo: 1 };
-        var b = { foo: 2 };
-        expect(memoizedGetfoo(a)).toBe(1);
-        expect(memoizedGetfoo(b)).toBe(2);
+            var memoizedAdd1 = memoize(add1);
+            memoizedAdd1(2);
+            memoizedAdd1(2);
+            memoizedAdd1(3);
+            memoizedAdd1(3);
+            expect(calls).toBe(2);
+        });
+        xit('is independent of other memoized functions', function() {
+            function add1(x) {
+                return x + 1;
+            }
+            function add2(x) {
+                return x + 2;
+            }
+            var memoizedAdd1 = memoize(add1);
+            var memoizedAdd2 = memoize(add2);
+            expect(memoizedAdd1(1)).toBe(2);
+            expect(memoizedAdd2(1)).toBe(3);
+        });
+        // The tests after this point are more difficult. Feel free to skip them.
+        xit('correctly handles arguments that match the names of methods of object and array', function() {
+            function pluralise(x) {
+                return x + 's';
+            }
+
+            var memoizedPluralise = memoize(pluralise);
+            expect(memoizedPluralise('push')).toBe('pushs');
+            expect(memoizedPluralise('toString')).toBe('toStrings');
+        });
+        xit('behaves correctly if the argument is hasOwnProperty (another method of object)', function() {
+            function pluralise(x) {
+                return x + 's';
+            }
+
+            var memoizedPluralise = memoize(pluralise);
+            expect(memoizedPluralise('hasOwnProperty')).toBe('hasOwnPropertys');
+            expect(memoizedPluralise('push')).toBe('pushs');
+        });
+        // Hint: The ECMA 6 Map type is one way to solve this. (Chrome supports it if you enable experimental JavaScript in chrome://flags)
+        xit('distinguishes between different objects passed as arguments', function() {
+            function getFoo(obj) {
+                return obj.foo;
+            }
+
+            var memoizedGetfoo = memoize(getFoo);
+
+            var a = { foo: 1 };
+            var b = { foo: 2 };
+            expect(memoizedGetfoo(a)).toBe(1);
+            expect(memoizedGetfoo(b)).toBe(2);
+        });
     });
 });
 
