@@ -7,6 +7,14 @@ describe('curry1', function() {
     xit('returns a function that fixes the first argument of add to be 3', function() {
         var add3 = curry1(add, 3);
         expect(add3(1)).toBe(4);
+        expect(add3(10)).toBe(13);
+    });
+    xit('returns a function that fixes the first argument of subtract to be 3', function() {
+        var sub3 = curry1(function(a, b) {
+            return a - b;
+        }, 3);
+        expect(sub3(1)).toBe(2);
+        expect(sub3(9)).toBe(-6);
     });
     // Not really a test. Just a cool example.
     xit('is awesome', function() {
